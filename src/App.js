@@ -1,100 +1,49 @@
-// frontend/src/App.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+// BrowserRouterをreact-router-domからインポートします
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { Container, CssBaseline } from '@mui/material';
 import Header from './components/Header';
-import PostForm from './components/PostForm';
-import Post from './components/Post'
-import DeleteButton from './components/DeleteButton';
-
-const API_URL = "http://127.0.0.1:8000/api/posts/";
+import EmpList from './components/EmpList';
+import MyPage from './pages/MyPage';
+import LoginPage from './pages/LoginPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-  const [posts, setPosts] = useState([]);
-  const [editingPost, setEditingPost] = useState(null);
-  const [editForm, setEditForm] = useState({ title: '', content: '' });
-
-  useEffect(() => {
-    axios.get(API_URL)
-      .then(res => {
-        setPosts(res.data);
-      })
-      .catch(error => {
-        console.error("There was an error fetching the posts!", error);
-      });
-  }, []); // 第2引数の[]は「最初の一回だけ実行する」という意味
-  const handlePostCreated = (newPost) => {
-    setPosts([newPost, ...posts]);
-  };  
-
-  // --- ▼ここから追加▼ ---
-  // 「編集」ボタンが押された時の処理
-  const handleEdit = (post) => {
-    setEditingPost(post);
-    setEditForm({ title: post.title, content: post.content });
-  };
-
-  // 編集フォームの入力が変更された時の処理
-  const handleEditFormChange = (e) => {
-    setEditForm({ ...editForm, [e.target.name]: e.target.value });
-  };
-
-  // 編集フォームが送信された時の処理
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    axios.put(`${API_URL}${editingPost.id}/`, editForm)
-      .then(res => {
-        // 画面上の投稿リストも更新
-        setPosts(posts.map(p => (p.id === editingPost.id ? res.data : p)));
-        setEditingPost(null); // 編集モードを終了
-      })
-      .catch(error => { console.error('更新に失敗しました:', error); });
-  };
-  // --- ▲ここまで追加▲ ---
-
-  //deleteコンポーネントは作っても削除ロジックはApp.jsが持っておく
-  const handleDelete = (postId) => {
-    axios.delete(`${API_URL}${postId}/`)
-      .then(() => {
-        setPosts(posts.filter(post => post.id !== postId));
-      })
-      .catch(error => {
-        console.error('投稿の削除に失敗しました:', error);
-      });
-  };
-
-
   return (
-    <div className="App">
-      <Header />
-      <PostForm onPostCreated={handlePostCreated} />
-      <main className="App-main">
-        
-         {posts.map(post => (
-            <Post
-              key={post.id}
-              post={post}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          ))}
-          
-          {/*
-          <article key={post.id} className="post-excerpt">
-            <Post postTitle={post.title} postContent={post.content}/>
-          
-            <h2>{post.title}</h2>
-            <p>{post.content.substring(0, 100)}...</p>
-            
-            <small>Posted on: {post.created_at}</small>
-            <DeleteButton postId={post.id} onDelete={handleDelete} />
+    // Routerで全体を囲みます
+    <Router>
+      <AuthProvider>
+        <CssBaseline />
+        <Header />
+        <Container component="main" sx={{ mt: 4, mb: 4 }}>
+            <Routes>
+              {/* ホームページ (従業員一覧) */}
+              <Route path="/" element={<EmpList />} />
 
-          </article>
+              {/* ログインページ */}
+              {/* '/login/:userId' というパスで、userIdを動的に受け取れるようにします */}
+              <Route path="/login/:userId" element={<LoginPage />} />
 
-        ))}
-          */}
-      </main>
-    </div>
+              {/* マイページ (要認証) */}
+              <Route 
+                path="/mypage/:userId"
+                element={
+                  <ProtectedRoute>
+                    <MyPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* 従業員が選択されていない場合のログインページ（念のため）*/}
+              <Route path="/login" element={<LoginPage />} />
+
+            </Routes>
+        </Container>
+      </AuthProvider>
+    </Router>
   );
 }
 
 export default App;
+

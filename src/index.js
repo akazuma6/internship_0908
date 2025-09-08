@@ -6,13 +6,18 @@ import reportWebVitals from './reportWebVitals';
 
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
+// ↓ BrowserRouterのインポートは不要になります
+// import { BrowserRouter } from 'react-router'; 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    {/* ↓ App.js側でRouterを管理しているため、ここは削除します */}
+    {/* <BrowserRouter> */}
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    {/* </BrowserRouter> */}
   </React.StrictMode>
 );
 
