@@ -8,10 +8,10 @@ import { useNavigate } from 'react-router-dom';
 const BootstrapButton = styled(Button)({
   boxShadow: 'none',
   textTransform: 'none',
-  fontSize: 10,
+  fontSize: 13,
   padding: '2px 2px',
   border: '1px solid',
-  lineHeight: 1.3,
+  lineHeight: 3.3,
   backgroundColor: '#0063cc',
   borderColor: '#0063cc',
   fontFamily: [

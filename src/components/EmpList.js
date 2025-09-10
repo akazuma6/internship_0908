@@ -6,25 +6,10 @@ import {
 } from '@mui/material';
 import LoginButton from './LoginButton';
 import { API_BASE_URL } from '../config';
+import HpBar from './HpBar';
 
 const API_URL = `${API_BASE_URL}/employees/employeeprofiles/`;
 
-// HPバーを表示するコンポーネント
-const HpBar = ({ value }) => {
-  if (value === null || typeof value === 'undefined') return null;
-  const normalizedValue = Math.max(0, Math.min(10, value)) * 10;
-  const barColor = normalizedValue > 50 ? 'primary' : normalizedValue > 20 ? 'warning' : 'error';
-  return (
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <Box sx={{ width: '100%', mr: 1 }}>
-        <LinearProgress variant="determinate" value={normalizedValue} color={barColor} />
-      </Box>
-      <Box sx={{ minWidth: 35 }}>
-        <Typography variant="body2" color="text.secondary">{`${Math.round(value * 10) / 10}`}</Typography>
-      </Box>
-    </Box>
-  );
-};
 
 export default function EmpList() {
   const [employees, setEmployees] = useState([]);
@@ -47,6 +32,8 @@ export default function EmpList() {
   }, []);
 
   return (
+    <div>
+
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="employee list">
         <TableHead>
@@ -87,6 +74,7 @@ export default function EmpList() {
         </TableBody>
       </Table>
     </TableContainer>
+    </div>
   );
 }
 

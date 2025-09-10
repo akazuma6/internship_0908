@@ -9,8 +9,8 @@ import { API_BASE_URL } from '../config';
 import AuthContext from '../context/AuthContext';
 
 export default function MyPage() {
-  const { userId } = useParams();
-  const { authToken } = useContext(AuthContext);
+  const { userId } = useParams(); //URLからuserIdを取得
+  const { authToken } = useContext(AuthContext); //providerで囲まれているなかで使用されていればauthTokenが取得できる
 
   const [employee, setEmployee] = useState(null);
   const [attendance, setAttendance] = useState(null);
@@ -19,10 +19,11 @@ export default function MyPage() {
   const [activeRole, setActiveRole] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
+//Callbackフック、パフォーマンスを最適化するためのもの。依存している値が変わらない限り再作成しない
   const getAuthHeaders = useCallback(() => ({
     headers: { 'Authorization': `Bearer ${authToken.access}` }
   }), [authToken]);
+
 
   const fetchAttendanceHistory = useCallback((employeeId) => {
     axios.get(`${API_BASE_URL}/employees/attendances/?employee_profile=${employeeId}`, getAuthHeaders())

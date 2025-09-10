@@ -12,6 +12,8 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+  
+
 
 .App-header {
   background-color: #282c34;
@@ -35,4 +37,10 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+.EmpList {
+  height: 20px;
+  margin : 300px ;
 }

@@ -8,7 +8,10 @@ import EmpList from './components/EmpList';
 import MyPage from './pages/MyPage';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import HomePage from './pages/HomePage';
 
+
+//
 function App() {
   return (
     // Routerで全体を囲みます
@@ -19,7 +22,7 @@ function App() {
         <Container component="main" sx={{ mt: 4, mb: 4 }}>
             <Routes>
               {/* ホームページ (従業員一覧) */}
-              <Route path="/" element={<EmpList />} />
+              <Route path="/" element={<HomePage />} />
 
               {/* ログインページ */}
               {/* '/login/:userId' というパスで、userIdを動的に受け取れるようにします */}
